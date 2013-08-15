@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+PAASPROVIDER_DIR=".paasprovider"
+APP_DIR="/app"
+ARTIFACT_SOURCE_URL="https://s3-eu-west-1.amazonaws.com/${DOMAIN}.packages/buildpack-python/releases"
