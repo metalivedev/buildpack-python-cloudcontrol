@@ -140,7 +140,7 @@ if [ ! "$SKIP_INSTALL" ]; then
     curl "$ARTIFACT_SOURCE_URL/$PYTHON_VERSION.tar.bz2" -s | tar jx &> /dev/null
     if [[ $? != 0 ]] ; then
       puts-warn "Requested runtime ($PYTHON_VERSION) was not found."
-      puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
+      puts-warn "Aborting."
       exit 1
     fi
     mv python $PAASPROVIDER_DIR/python
@@ -216,9 +216,9 @@ bpwatch stop collectstatic
 #
 
 # Set context environment variables.
-set-env PATH '$APP_PYTHON_HOME_DIR/bin:$PATH'
 set-env PYTHONUNBUFFERED true
 set-env PYTHONHOME $APP_PYTHON_HOME_DIR
+set-env PATH '$PYTHONHOME/bin:$PATH'
 set-default-env LIBRARY_PATH $LIBRARY_DIR
 set-default-env LD_LIBRARY_PATH $LIBRARY_DIR
 set-default-env LANG en_US.UTF-8

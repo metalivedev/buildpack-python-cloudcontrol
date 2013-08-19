@@ -9,7 +9,7 @@ indent() {
 MANAGE_FILE=$(find . -maxdepth 3 -type f -name 'manage.py' | head -1)
 MANAGE_FILE=${MANAGE_FILE:-fakepath}
 
-[ -f .heroku/collectstatic_disabled ] && DISABLE_COLLECTSTATIC=1
+[ -f $PAASPROVIDER_DIR/collectstatic_disabled ] && DISABLE_COLLECTSTATIC=1
 
 if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
     set +e
@@ -24,8 +24,7 @@ if [ ! "$DISABLE_COLLECTSTATIC" ] && [ -f "$MANAGE_FILE" ]; then
         python $MANAGE_FILE collectstatic --noinput  2>&1 | sed '/^Copying/d;/^$/d;/^ /d' | indent
 
         [ $? -ne 0 ] && {
-            echo " !     Error running manage.py collectstatic. More info:"
-            echo "       http://devcenter.heroku.com/articles/django-assets"
+            echo " !     Error running manage.py collectstatic."
         }
     fi
 
