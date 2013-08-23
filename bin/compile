@@ -195,6 +195,8 @@ if (grep -Fiq "hg+" requirements.txt) then
   bpwatch stop mercurial_install
 fi
 
+export PYTHONPATH=$APP_PYTHON_HOME_DIR
+export PYTHONHOME=$APP_PYTHON_HOME_DIR
 $BUILDPACK_PYTHON_HOME/bin/python -c "import sys; print sys.executable"
 
 # Install dependencies with Pip.
