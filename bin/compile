@@ -202,7 +202,7 @@ puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
-ln $BUILDPACK_PYTHON_HOME/bin/python /usr/bin/python_runtime
+ln -s $BUILDPACK_PYTHON_HOME/bin/python /usr/bin/python_runtime
 
 /usr/bin/python_runtime $BUILDPACK_PYTHON_HOME/bin/pip install --use-mirrors -r requirements.txt --exists-action=w --src=./$PAASPROVIDER_DIR/src | indent
 
