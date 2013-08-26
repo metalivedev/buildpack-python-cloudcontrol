@@ -69,7 +69,7 @@ LIBRARY_DIR="$APP_PAAS_DIR/vendor/lib"
 BUILDPACK_PYTHON_HOME=$BUILD_DIR/$PAASPROVIDER_DIR/python
 
 # Prepend proper path buildpack use.
-export PATH=$BUILDPACK_PYTHON_HOME/bin:$PATH
+export PATH=$APP_PYTHON_HOME_DIR/bin:$PATH
 export PYTHONUNBUFFERED=1
 export LANG=en_US.UTF-8
 export LIBRARY_PATH=$LIBRARY_DIR
@@ -191,7 +191,7 @@ bpwatch stop pylibmc_install
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
   bpwatch start mercurial_install
-    $BUILDPACK_PYTHON_HOME/bin/pip install --use-mirrors mercurial | cleanup | indent
+    $APP_PYTHON_HOME_DIR/bin/pip install --use-mirrors mercurial | cleanup | indent
   bpwatch stop mercurial_install
 fi
 
@@ -202,7 +202,7 @@ puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
 
-$BUILDPACK_PYTHON_HOME/bin/pip install --use-mirrors -r requirements.txt --exists-action=w --src=./$PAASPROVIDER_DIR/src | indent
+$APP_PYTHON_HOME_DIR/bin/pip install --use-mirrors -r requirements.txt --exists-action=w --src=./$PAASPROVIDER_DIR/src | indent
 
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
 [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
