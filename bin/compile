@@ -224,6 +224,7 @@ set-default-env LD_LIBRARY_PATH $LIBRARY_DIR
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
 set-default-env PYTHONPATH $APP_DIR/
+echo "mkdir -p /srv/tmp/builddir; ln -s -F /app/.paasprovider /srv/tmp/builddir/.paasprovider" >> $PROFILE_PATH
 
 
 # Experimental post_compile hook.
