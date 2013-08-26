@@ -194,10 +194,12 @@ bpwatch start pylibmc_install
   source $BIN_DIR/steps/pylibmc
 bpwatch stop pylibmc_install
 
+PIP_EXECUTABLE=$BUILDPACK_PYTHON_HOME/bin/pip
+
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
   bpwatch start mercurial_install
-    $PYTHON_EXE $BUILDPACK_PYTHON_HOME/bin/pip install --use-mirrors mercurial | cleanup | indent
+    $PYTHON_EXE $PIP_EXECUTABLE install --use-mirrors mercurial | cleanup | indent
   bpwatch stop mercurial_install
 fi
 
@@ -210,7 +212,7 @@ puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 
 pip --version
 echo "---------"
-$PYTHON_EXE pip install -U --use-mirrors -r requirements.txt --exists-action=w --src=./$PAASPROVIDER_DIR/src | indent
+$PYTHON_EXE $PIP_EXECUTABLE install -U --use-mirrors -r requirements.txt --exists-action=w --src=./$PAASPROVIDER_DIR/src | indent
 
 [ ! "$FRESH_PYTHON" ] && bpwatch stop pip_install
 [ "$FRESH_PYTHON" ] && bpwatch stop pip_install_first
