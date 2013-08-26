@@ -194,7 +194,7 @@ bpwatch start pylibmc_install
   source $BIN_DIR/steps/pylibmc
 bpwatch stop pylibmc_install
 
-PIP_EXECUTABLE="/usr/bin/env pip"
+PIP_EXECUTABLE="./$PAASPROVIDER_DIR/python/bin/pip"
 
 # Install Mercurial if it appears to be required.
 if (grep -Fiq "hg+" requirements.txt) then
