@@ -167,14 +167,14 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_VERSION* ]]; then
     # Prepare it for the real world
     puts-step "Installing Distribute ($DISTRIBUTE_VERSION)"
     cd $ROOT_DIR/vendor/distribute-$DISTRIBUTE_VERSION/
-    python setup.py install &> /dev/null
+    python setup.py install --executable=/usr/bin/env/python -d &> /dev/null
     cd $WORKING_DIR
   bpwatch stop install_distribute
 
   bpwatch start install_pip
     puts-step "Installing Pip ($PIP_VERSION)"
     cd $ROOT_DIR/vendor/pip-$PIP_VERSION/
-    python setup.py install &> /dev/null
+    python setup.py install --executable=/usr/bin/env/python -d &> /dev/null
     cd $WORKING_DIR
 
   bpwatch stop install_pip
