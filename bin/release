@@ -9,7 +9,6 @@ BUILD_DIR=$1
 APP_PAAS_DIR="$APP_DIR/$PAASPROVIDER_DIR"
 PYTHON_HOME_DIR="$APP_PAAS_DIR/python"
 
-
 cat <<EOF
 ---
 config_vars:

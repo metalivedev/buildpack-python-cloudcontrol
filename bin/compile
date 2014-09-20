@@ -52,12 +52,34 @@ TMP_APP_DIR=$CACHE_DIR/tmp_app_dir
 
 bpwatch start compile
 
-
 # We'll need to send these statics to other scripts we `source`.
 export BUILD_DIR CACHE_DIR BIN_DIR PROFILE_PATH
 
 # Syntax sugar.
+echo "Sourcing utils from $BIN_DIR/utils"
 source $BIN_DIR/utils
+puts-step "Now using puts-step"
+
+bpwatch start binaries
+  puts-step "Copy bin files:"
+  ls -l $BIN_DIR/
+  mkdir -p "$BUILD_DIR/bin"
+  puts-step "   nginx"
+  cp $BIN_DIR/nginx* $BUILD_DIR/bin/
+  puts-step "   uwsgi"
+  cp $BIN_DIR/uwsgi* $BUILD_DIR/bin/
+  puts-step "   dcapproot"
+  cp $BIN_DIR/dcapproot.sh $BUILD_DIR/bin
+  ls -l $BUILD_DIR/bin/
+  nginx_version=$($BUILD_DIR/bin/nginx -V 2>&1 | head -1 | awk '{ print $NF }')
+  puts-step "binaries: Installed ${nginx_version} to $BUILD_DIR/bin"
+bpwatch stop binaries
+
+bpwatch start config
+  mkdir -p "$BUILD_DIR/config"
+  cp $ROOT_DIR/config/* "$BUILD_DIR/config"
+  puts-step "config: Copied config files to $BUILD_DIR/config"
+bpwatch stop config
 
 # Directory Hacks for path consistiency.
 APP_DIR='$APP_DIR'
@@ -182,6 +204,12 @@ fi
 set -e
 hash -r
 
+# Install dotCloud packages, especially supervisor.
+# Important to do this before user packages so that users can override/upgrade with their requirements.txt
+bpwatch start dcrequirements
+  $APP_PYTHON_HOME_DIR/bin/pip install --use-mirrors -r config/dcrequirements.txt --exists-action=i --src=./$PAASPROVIDER_DIR/src | indent
+bpwatch stop dcrequirements
+
 # Pylibmc support.
 # See [`bin/steps/pylibmc`](pylibmc.html).
 bpwatch start pylibmc_install
@@ -238,6 +266,14 @@ bpwatch start dump_cache
     cp -R $dir $CACHE_DIR/
   done
 bpwatch stop dump_cache
+
+# Create a default Procfile if the user did not provide one
+if ! test -r $BUILD_DIR/Procfile; then
+    DEFAULTPROC="web: $HOME/bin/dcapproot.sh; supervisord -c config/supervisord.conf"
+    puts-step "Adding default Procfile: $DEFAULTPROC"
+    echo "$DEFAULTPROC" > $BUILD_DIR/Procfile
+fi
+
 
 # ### Fin.
 

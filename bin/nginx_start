@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -e
+
+#Substitute ${var} in template
+perl -p -i -e 's/\$\{([^}]+)\}/defined $ENV{$1} ? $ENV{$1} : $&/eg' < config/nginx.conf.template > config/nginx.conf
+
+#Initialize log directory.
+mkdir -p logs/nginx
+touch logs/nginx/access.log logs/nginx/error.log
+
+#Start App Server (like uwsgi)
+#by adding program to supervisord.conf
+
+#Start NGINX
+#We expect nginx to run in foreground.
+#We also expect a socket to be at /tmp/nginx.socket.
+echo 'buildpack=nginx at=nginx-start'
+bin/nginx -p . -c config/nginx.conf
+

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -e
+
+command="uwsgi -s ${TMPDIR}/nginx.socket --chmod-socket=660 --master --processes 4 --logdate --buffer-size 8192   "
+
+# intercept signals and propagate them as SIGINT
+trap 'kill -INT %1' SIGTERM SIGQUIT SIGINT
+# start uwsgi
+echo "Starting: $command"
+# execute the command
+$command &
+wait
+echo "Terminated: $command"
+
