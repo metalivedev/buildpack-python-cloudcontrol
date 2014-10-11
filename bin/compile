@@ -158,7 +158,7 @@ fi
 
 if [ ! "$SKIP_INSTALL" ]; then
   bpwatch start install_python
-    puts-step "Preparing Python runtime ($PYTHON_VERSION)"
+    puts-step "Preparing Python runtime ($PYTHON_VERSION) from $ARTIFACT_SOURCE_URL/$PYTHON_VERSION.tar.bz2"
     curl "$ARTIFACT_SOURCE_URL/$PYTHON_VERSION.tar.bz2" -s | tar jx &> /dev/null
     if [[ $? != 0 ]] ; then
       puts-warn "Requested runtime ($PYTHON_VERSION) was not found."
